@@ -1,7 +1,7 @@
 <script>
     import { LottiePlayer } from '@lottiefiles/svelte-lottie-player';
     import backgroundAnimation from "../../assets/background_animation_green.json"
-    import Login from "../../lib/components/Login.svelte";
+    import Login from "../../lib/components/auth/Login.svelte";
 </script>
 
 <main>
