@@ -25,6 +25,7 @@
 	"type": "module",
 	"dependencies": {
 		"@lottiefiles/svelte-lottie-player": "^0.3.0",
-		"axios": "^1.2.2"
+		"axios": "^1.2.2",
+		"svelte-icons": "^2.1.0"
 	}
 }

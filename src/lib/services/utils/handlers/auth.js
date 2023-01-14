@@ -10,8 +10,6 @@ export default async function handleAuthRequest({
     for(const key in submissionData) validationOutput[key] = validator[key](submissionData[key])
     for(const key in validationOutput) if(!validationOutput[key].isValid) return updateErrors({ ...validationOutput })
 
-    console.log(service)
-
     try {
         const response = await service(submissionData)
         console.log("REQUEST SUCCEEDED")
@@ -19,7 +17,6 @@ export default async function handleAuthRequest({
         onSuccessCallbackFunction(response.data)
     } catch(error) {
         console.log("REQUEST FAILED")
-        console.error(error)
-        onFailureCallbackFunction(error);
+        onFailureCallbackFunction({ api: { isValid: false, errorMessage:  error.response.data} });
     }
 }
