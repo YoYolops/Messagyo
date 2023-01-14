@@ -1,7 +1,6 @@
 <script>
     import { LottiePlayer } from '@lottiefiles/svelte-lottie-player';
-    import backgroundAnimation from "../../assets/background_animation_green.json"
-    import Login from "../../lib/components/auth/Login.svelte";
+    import backgroundAnimation from "../../assets/background_animation_green.json";
 </script>
 
 <main>
@@ -17,7 +16,7 @@
     </section>
 
     <div id="login_container">
-        <Login />
+        <slot></slot>
     </div>
 
 </main>
@@ -53,7 +52,5 @@
                 max-height: 500px;
             }
         }
-
     }
-
 </style>

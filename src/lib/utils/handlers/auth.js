@@ -17,6 +17,7 @@ export default async function handleAuthRequest({
         onSuccessCallbackFunction(response.data)
     } catch(error) {
         console.log("REQUEST FAILED")
+        console.error(error)
         onFailureCallbackFunction({ api: { isValid: false, errorMessage:  error.response.data} });
     }
 }

@@ -1,12 +1,15 @@
 <script>
     import Textfield from '@smui/textfield';
     import HelperText from '@smui/textfield/helper-text';
-    import { Login as LoginValidator } from "../../services/utils/validators";
-    import handleAuthRequest from "../../services/utils/handlers/auth";
-    import UserService from "../../services/auth/user";
-    import Button from "../../components/generics/Button.svelte";
-    import Alerter from '../alerter/Alerter.svelte';
+    import handleAuthRequest from "$lib/utils/handlers/auth";
+    import Button from "$lib/components/generics/Button.svelte";
+    import Alerter from '$lib/components/alerter/Alerter.svelte';
+    import { page } from "$app/stores"
+    import { onMount } from 'svelte';
 
+    onMount(() => console.log($page))
+
+    let authType = $page.params.operation
     let isLoading = false;
     let loginCredentials = { username: "", password: "" }
     let errors = {
@@ -15,16 +18,15 @@
         api: { isValid: true, errorMessage: "" }
     }
 
-    function updateLoadingState(value) {
-        isLoading = value
-    }
+    $: config = $page.data
 
+    function updateLoadingState(value) { isLoading = value }
     function handleLogin() {
          handleAuthRequest({
             submissionData: loginCredentials,
-            validator: LoginValidator,
+            validator: config.validator,
             updateErrors: newErrors => { errors = { ...errors, ...newErrors } },
-            service: UserService.login,
+            service: config.service,
             onSuccessCallbackFunction: () => console.log("onSuccessCallbackFunction"),
             onFailureCallbackFunction: apiError => {
                 errors = { ...errors, ...apiError }
@@ -39,7 +41,7 @@
         isOn={!errors.api.isValid}
         errorData={{ title: "Sorry, we i could not do that", errorMessage: errors.api.errorMessage }}
     />
-    <h1>LOGIN</h1>
+    <h1>{config.headerText}</h1>
 
     <Textfield
         style='width: 100%; max-width: 350px;'
@@ -70,9 +72,10 @@
         onClick={handleLogin}
         disabled={isLoading}
     >
-        Login
+        { config.submitButtonText }
     </Button>
 
+    <a href={`/auth/${config.changeOperationEndPoint}`} >{ config.changeOperationTypeText }</a>
 
 </div>
 
@@ -91,6 +94,10 @@
             font-weight: 700;
             color: var(--primary_green);
             border-bottom: 3px solid var(--primary_green);
+        }
+
+        a {
+            margin-top: 10px;
         }
 
     }
