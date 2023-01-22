@@ -2,14 +2,15 @@
     import Textfield from '@smui/textfield';
     import HelperText from '@smui/textfield/helper-text';
     import handleAuthRequest from "$lib/utils/handlers/auth";
-    import Button from "$lib/components/generics/Button.svelte";
+    import Button from '$lib/components/generics/Button.svelte';
     import Alerter from '$lib/components/alerter/Alerter.svelte';
     import { page } from "$app/stores"
     import { onMount } from 'svelte';
+    import tokenAdapter from "$lib/adapters/token.js"
+    import { updateUserData } from '$lib/stores/user';
 
-    onMount(() => console.log($page))
+    onMount(() => console.log($page.data))
 
-    let authType = $page.params.operation
     let isLoading = false;
     let loginCredentials = { username: "", password: "" }
     let errors = {
@@ -20,14 +21,24 @@
 
     $: config = $page.data
 
+    async function onCompletedLogin(responseData) {
+        const decodedData = await tokenAdapter().decode(responseData.token)
+        updateUserData(decodedData)
+        window.location.href = "/"
+    }
+
+    function onCompletedRegister() {
+        window.location.href = "/auth/login"
+    }
+
     function updateLoadingState(value) { isLoading = value }
-    function handleLogin() {
+    function handleSubmission() {
          handleAuthRequest({
             submissionData: loginCredentials,
             validator: config.validator,
             updateErrors: newErrors => { errors = { ...errors, ...newErrors } },
             service: config.service,
-            onSuccessCallbackFunction: () => console.log("onSuccessCallbackFunction"),
+            onSuccessCallbackFunction: config.isLogin ? onCompletedLogin : onCompletedRegister,
             onFailureCallbackFunction: apiError => {
                 errors = { ...errors, ...apiError }
                 updateLoadingState(false)
@@ -37,6 +48,7 @@
 </script>
 
 <div>
+    <!-- could be manageg by a global store state -->
     <Alerter 
         isOn={!errors.api.isValid}
         errorData={{ title: "Sorry, we i could not do that", errorMessage: errors.api.errorMessage }}
@@ -69,7 +81,7 @@
 
     <Button
         id="login_button"
-        onClick={handleLogin}
+        onClick={handleSubmission}
         disabled={isLoading}
     >
         { config.submitButtonText }

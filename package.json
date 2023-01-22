@@ -26,6 +26,8 @@
 	"dependencies": {
 		"@lottiefiles/svelte-lottie-player": "^0.3.0",
 		"axios": "^1.2.2",
+		"jose": "^4.11.2",
+		"socket.io-client": "^4.5.4",
 		"svelte-icons": "^2.1.0"
 	}
 }

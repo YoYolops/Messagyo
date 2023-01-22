@@ -1,6 +1,6 @@
 <script>
     import { LottiePlayer } from '@lottiefiles/svelte-lottie-player';
-    import backgroundAnimation from "../../assets/background_animation_green.json";
+    import backgroundAnimation from "$lib/assets/background_animation_green.json";
 </script>
 
 <main>
