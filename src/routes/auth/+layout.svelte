@@ -1,24 +1,32 @@
 <script>
     import { LottiePlayer } from '@lottiefiles/svelte-lottie-player';
     import backgroundAnimation from "$lib/assets/background_animation_green.json";
+    import { user } from '$lib/stores/user';
+    import { onMount } from 'svelte';
+    import LoadingSpinner from '$lib/components/generics/LoadingSpinner.svelte';
+
+    onMount(() => { if($user) window.location.href = "/" })
 </script>
 
 <main>
-    <section id="background_container">
-        <LottiePlayer
-            src={backgroundAnimation}
-            autoplay="{true}"
-            loop="{true}"
-            renderer="svg"
-            background="transparent"
-            controls={false}
-        />
-    </section>
+    {#if !$user}
+        <section id="background_container">
+            <LottiePlayer
+                src={backgroundAnimation}
+                autoplay="{true}"
+                loop="{true}"
+                renderer="svg"
+                background="transparent"
+                controls={false}
+            />
+        </section>
 
-    <div id="login_container">
-        <slot></slot>
-    </div>
-
+        <div id="login_container">
+            <slot></slot>
+        </div>
+    {:else}
+        <LoadingSpinner style="width: 120px; position: fixed; top: calc((100vh/2) - 60px); left: calc((100vw/2) - 60px)"/>
+    {/if}
 </main>
 
 <style lang="scss">

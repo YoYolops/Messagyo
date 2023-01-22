@@ -17,6 +17,7 @@ export function updateUserData(newData) {
 function getLocalStorageUserData() {
     console.log("GETTING USER DATA")
     const storagedUserData = JSON.parse(localStorage.getItem("userData"))
+    console.log("Storaged data: ", storagedUserData)
     return storagedUserData
 }
 
